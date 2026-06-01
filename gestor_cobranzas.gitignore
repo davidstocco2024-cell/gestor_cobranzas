@@ -1,0 +1,21 @@
+# Entornos virtuales y caché de ejecución de Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+
+# Configuración y Credenciales (¡CRÍTICO, NUNCA SUBIR!)
+.env
+.encryption_key
+
+# Archivos de datos e inputs locales
+deudores.xlsx
+
+# Reportes generados y mensajes de WhatsApp con datos confidenciales
+output/
+mensajes/
+
+# Logs de operación y auditoría corporativa
+audit/
+*.log
