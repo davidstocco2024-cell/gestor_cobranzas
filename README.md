@@ -8,14 +8,14 @@
 
 | Feature | Detalle |
 |---|---|
-| 🔒 Privacidad real | Los nombres nunca viajan a Google — placeholder local `{nombre}` |
-| 🇦🇷 Locale nativo | Soporte `ar` (`1.500,50`) y `en` (`1,500.50`) sin corrupción silenciosa |
-| 🤖 IA con fallback | Gemini 2.0 Flash + mensajes estáticos por segmento si la API falla |
-| 🔁 Retry automático | Backoff exponencial con jitter ante errores de red o cuota |
-| ✅ Anti-alucinación | Valida que los montos generados por IA no difieran más del 50% del real |
-| 📋 Audit log inmutable | JSON Lines con `fsync`, hashes SHA-256 y trazabilidad de operador |
-| 🔐 Cifrado en reposo | Fernet (AES-128) opcional para reportes locales |
-| 🖥️ CLI completo | `--locale`, `--pausa`, `--auto-confirm`, `--sin-cifrado`, `--no-audit` |
+|  Privacidad real | Los nombres nunca viajan a Google — placeholder local `{nombre}` |
+|  Locale nativo | Soporte `ar` (`1.500,50`) y `en` (`1,500.50`) sin corrupción silenciosa |
+|  IA con fallback | Gemini 2.0 Flash + mensajes estáticos por segmento si la API falla |
+|  Retry automático | Backoff exponencial con jitter ante errores de red o cuota |
+|  Anti-alucinación | Valida que los montos generados por IA no difieran más del 50% del real |
+|  Audit log inmutable | JSON Lines con `fsync`, hashes SHA-256 y trazabilidad de operador |
+|  Cifrado en reposo | Fernet (AES-128) opcional para reportes locales |
+|  CLI completo | `--locale`, `--pausa`, `--auto-confirm`, `--sin-cifrado`, `--no-audit` |
 
 ---
 
@@ -155,7 +155,7 @@ Este script fue diseñado para operar con datos sensibles de clientes:
 - **Audit log con trazabilidad**: cada ejecución registra operador, host, PID, timestamp, hash SHA-256 del Excel de entrada y del reporte generado. Escritura `fsync` para durabilidad ante crashes.
 - **Cifrado en reposo**: si `cryptography` está instalado, los reportes Excel y TXT se cifran con Fernet (AES-128). La clave se guarda en `.encryption_key` con permisos `600`.
 
-> ⚠️ **Importante**: hacé backup del archivo `.encryption_key`. Sin él, los reportes cifrados anteriores son irrecuperables.
+>  **Importante**: hacé backup del archivo `.encryption_key`. Sin él, los reportes cifrados anteriores son irrecuperables.
 
 ---
 
