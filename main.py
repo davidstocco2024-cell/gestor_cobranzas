@@ -1,16 +1,6 @@
 """
-Cobranzas IA v3.0 — Gestor automatizado para estudios contables
-Hardening final: bugs, performance, seguridad y compliance (Ley 25.326)
+Cobranzas IA — Gestor automatizado para estudios contables
 
-Mejoras vs v2:
-  · argparse no requiere API key (chequeo movido a main → --help funciona siempre)
-  · Locale explícito (--locale ar|en) — sin corrupción silenciosa de datos
-  · Audit log JSONL append-only con fsync para compliance (--no-audit para desactivar)
-  · pausa como parámetro de función, no global mutable
-  · Confirmación muestra tiempo estimado, no duplica len(df)
-  · Mantiene: cifrado Fernet opcional, anonimización real con placeholder,
-    retry con backoff, validación de output, chmod 600
-  · Compatible Python 3.8+
 """
 
 import argparse
