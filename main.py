@@ -128,7 +128,7 @@ def _init_encryption():
     """
     Inicializa cifrado Fernet si cryptography está instalado.
 
-    ⚠️  IMPORTANTE: la clave en .encryption_key es la única forma de
+      IMPORTANTE: la clave en .encryption_key es la única forma de
     descifrar los archivos generados. Hacé backup en lugar seguro.
     Sin ella los reportes anteriores son irrecuperables.
     """
@@ -137,20 +137,20 @@ def _init_encryption():
         from cryptography.fernet import Fernet
     except ImportError:
         logger.warning(
-            "⚠️  cryptography no instalado — archivos NO se cifrarán. "
+            "  cryptography no instalado — archivos NO se cifrarán. "
             "Para activar: pip install cryptography"
         )
         return
 
     if _KEY_FILE.exists():
         key = _KEY_FILE.read_bytes()
-        logger.info(f"🔑 Usando clave de cifrado existente: {_KEY_FILE}")
+        logger.info(f" Usando clave de cifrado existente: {_KEY_FILE}")
     else:
         key = Fernet.generate_key()
         _KEY_FILE.write_bytes(key)
         os.chmod(_KEY_FILE, 0o600)
         logger.warning(
-            f"🔑 Nueva clave generada en '{_KEY_FILE}'. "
+            f" Nueva clave generada en '{_KEY_FILE}'. "
             "HACÉ BACKUP — sin ella los reportes son ilegibles."
         )
     _FERNET = Fernet(key)
@@ -252,7 +252,7 @@ def cargar_datos(archivo="deudores.xlsx", locale="ar"):
 
     n_invalidos = int(df["monto"].isna().sum())
     if n_invalidos:
-        logger.warning(f"⚠️  {n_invalidos} monto(s) inválido(s) — se descartan")
+        logger.warning(f"  {n_invalidos} monto(s) inválido(s) — se descartan")
         df = df.dropna(subset=["monto"])
 
     df["nombre"] = df["nombre"].astype(str).str.strip()
@@ -261,7 +261,7 @@ def cargar_datos(archivo="deudores.xlsx", locale="ar"):
     if df.empty:
         raise DatosInvalidos("El archivo no contiene registros válidos tras la limpieza")
 
-    logger.info(f"✅ Cargados {len(df)} deudores desde '{archivo}' (locale: {locale})")
+    logger.info(f" Cargados {len(df)} deudores desde '{archivo}' (locale: {locale})")
     return df
 
 
@@ -274,7 +274,7 @@ def calcular_mora(df):
     )
     n_invalidas = int(df["fecha_vencimiento"].isna().sum())
     if n_invalidas:
-        logger.warning(f"⚠️  {n_invalidas} fecha(s) inválida(s) — se excluyen")
+        logger.warning(f"  {n_invalidas} fecha(s) inválida(s) — se excluyen")
         df = df.dropna(subset=["fecha_vencimiento"])
 
     if df.empty:
@@ -395,7 +395,7 @@ def procesar_mensajes(df, client, pausa=PAUSA_ENTRE_LLAMADAS, auto_confirm=False
         minutos = total * pausa / 60
         try:
             resp = input(
-                f"\n⚠️  Vas a procesar {total} deudores con IA "
+                f"\n  Vas a procesar {total} deudores con IA "
                 f"(~{minutos:.1f} min estimados). ¿Continuar? (s/n): "
             )
         except EOFError:
@@ -404,7 +404,7 @@ def procesar_mensajes(df, client, pausa=PAUSA_ENTRE_LLAMADAS, auto_confirm=False
             logger.info("Proceso cancelado por el usuario.")
             raise SystemExit(0)
 
-    logger.info(f"🤖 Generando mensajes con Gemini ({total} deudores)...")
+    logger.info(f" Generando mensajes con Gemini ({total} deudores)...")
     if audit:
         audit.log("procesamiento_inicio", n_deudores=total, pausa=pausa)
 
@@ -522,7 +522,7 @@ def main():
     if not args.sin_cifrado:
         _init_encryption()
     else:
-        logger.warning("⚠️  Cifrado desactivado por --sin-cifrado")
+        logger.warning("  Cifrado desactivado por --sin-cifrado")
 
     # Audit log
     audit = None if args.no_audit else AuditLog(args.audit_log)
@@ -530,13 +530,13 @@ def main():
     # API key — chequeo AQUÍ, no a nivel módulo, para que --help funcione siempre
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        logger.error("❌ No se encontró GEMINI_API_KEY en .env")
+        logger.error(" No se encontró GEMINI_API_KEY en .env")
         if audit:
             audit.log("error_config", motivo="falta GEMINI_API_KEY")
         return 1
     client = genai.Client(api_key=api_key)
 
-    logger.info("🚀 Iniciando Cobranzas IA v3.0")
+    logger.info(" Iniciando Cobranzas IA v3.0")
     if audit:
         audit.log(
             "proceso_inicio",
@@ -558,7 +558,7 @@ def main():
                 n_deudores=len(df),
             )
     except DatosInvalidos as e:
-        logger.error(f"❌ Datos inválidos: {e}")
+        logger.error(f" Datos inválidos: {e}")
         if audit: audit.log("error_datos", detalle=str(e))
         return 1
 
@@ -566,7 +566,7 @@ def main():
     try:
         df = calcular_mora(df)
     except DatosInvalidos as e:
-        logger.error(f"❌ {e}")
+        logger.error(f" {e}")
         if audit: audit.log("error_datos", detalle=str(e))
         return 1
 
@@ -583,7 +583,7 @@ def main():
             audit=audit,
         )
     except DatosInvalidos as e:
-        logger.error(f"❌ {e}")
+        logger.error(f" {e}")
         if audit: audit.log("error_procesamiento", detalle=str(e))
         return 1
 
@@ -605,8 +605,8 @@ def main():
     if audit:
         audit.log("proceso_fin", total=len(df))
 
-    logger.info("✅ Proceso finalizado v3.0")
-    print(f"Archivos generados:\n  📊 {ruta_excel}\n  📝 {ruta_txt}\n")
+    logger.info(" Proceso finalizado v3.0")
+    print(f"Archivos generados:\n   {ruta_excel}\n   {ruta_txt}\n")
     return 0
 
 
